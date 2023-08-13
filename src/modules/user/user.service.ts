@@ -1,4 +1,5 @@
 import { PrismaClient, Profile, User } from "@prisma/client";
+import { Response } from "express";
 
 const prisma = new PrismaClient();
 
@@ -48,8 +49,22 @@ const getUsers = async() =>{
     });
     return result;
 }
+
+const getSingleUser = async(id: number) =>{
+    const result = await prisma.user.findUnique({
+        where:{
+            id
+        },
+        include:{
+            profile:true
+        }
+    })
+
+    return result
+}
 export const UserService = {
     insertIntoDB,
     insertOrUpdateProfile,
-    getUsers
+    getUsers,
+    getSingleUser
 }
